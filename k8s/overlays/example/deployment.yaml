@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: container
+        image: octolab.azurecr.io/hello-app:latest
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: octolab-registry-secret
