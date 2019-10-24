@@ -1,4 +1,5 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -17,3 +18,18 @@ steps:
     repository: 'hello-app'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
+
+- task: OctopusPack@4
+  inputs:
+    PackageId: 'Hello.App'
+    PackageFormat: 'Zip'
+    PackageVersion: '$(Version.Full)'
+    SourcePath: 'k8s'
+    OutputPath: '$(Build.ArtifactStagingDirectory)'
+    Include: '$(Build.SourcesDirectory)/k8s'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'OctupusPkg'
+    publishLocation: 'Container'
