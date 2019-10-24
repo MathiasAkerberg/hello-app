@@ -18,15 +18,14 @@ steps:
     repository: 'hello-app'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
-
+    
 - task: OctopusPack@4
   inputs:
     PackageId: 'HelloApp'
     PackageFormat: 'Zip'
-    PackageVersion: '$(Build.BuildNumber)'
-    SourcePath: 'k8s'
+    PackageVersion: '$(Version.Number)'
+    SourcePath: '$(Build.SourcesDirectory)/k8s'
     OutputPath: '$(Build.ArtifactStagingDirectory)'
-    Include: '$(Build.SourcesDirectory)/k8s'
 
 - task: PublishBuildArtifacts@1
   inputs:
