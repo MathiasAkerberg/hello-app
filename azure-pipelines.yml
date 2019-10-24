@@ -36,6 +36,6 @@ steps:
 - task: OctopusPush@4
   inputs:
     OctoConnectedServiceName: 'srcilabvm01'
-    Package: '$(Build.ArtifactStagingDirectory)\HelloApp.$(Version.Number).nupkg'
+    Package: '$(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg'
     Space: 'Default'
     Replace: 'false'
