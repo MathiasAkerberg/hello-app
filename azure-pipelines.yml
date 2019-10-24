@@ -29,13 +29,13 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)\HelloApp.$(Version.Number).nupkg'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'OctopusPkg'
     publishLocation: 'Container'
   
 - task: OctopusPush@4
   inputs:
     OctoConnectedServiceName: 'srcilabvm01'
-    Package: 'OctopusPkg'
+    Package: '$(Build.ArtifactStagingDirectory)\HelloApp.$(Version.Number).nupkg'
     Space: 'Default'
     Replace: 'false'
