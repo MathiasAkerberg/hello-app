@@ -18,7 +18,7 @@ steps:
     repository: 'hello-app'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
-    
+
 - task: OctopusPack@4
   inputs:
     PackageId: 'HelloApp'
@@ -30,12 +30,12 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'OctupusPkg'
+    ArtifactName: 'OctopusPkg'
     publishLocation: 'Container'
   
 - task: OctopusPush@4
   inputs:
     OctoConnectedServiceName: 'srcilabvm01'
-    Package: 'HelloApp'
+    Package: 'OctopusPkg'
     Space: 'Default'
     Replace: 'false'
