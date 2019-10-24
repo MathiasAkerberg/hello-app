@@ -21,9 +21,9 @@ steps:
 
 - task: OctopusPack@4
   inputs:
-    PackageId: 'Hello.App'
+    PackageId: 'HelloApp'
     PackageFormat: 'Zip'
-    PackageVersion: '$(Version.Full)'
+    PackageVersion: '$(Build.BuildNumber)'
     SourcePath: 'k8s'
     OutputPath: '$(Build.ArtifactStagingDirectory)'
     Include: '$(Build.SourcesDirectory)/k8s'
@@ -33,3 +33,10 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'OctupusPkg'
     publishLocation: 'Container'
+  
+- task: OctopusPush@4
+  inputs:
+    OctoConnectedServiceName: 'srcilabvm01'
+    Package: 'HelloApp'
+    Space: 'Default'
+    Replace: 'false'
