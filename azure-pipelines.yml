@@ -33,9 +33,7 @@ steps:
     ArtifactName: 'OctopusPkg'
     publishLocation: 'Container'
   
-- task: OctopusPush@4
+- task: OctopusPush@2
   inputs:
     OctoConnectedServiceName: 'srcilabvm01'
     Package: '$(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg'
-    Space: 'Default'
-    Replace: 'false'
