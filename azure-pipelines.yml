@@ -14,7 +14,7 @@ steps:
 
 - task: Docker@2
   inputs:
-    containerRegistry: 'octolabRegistry'
+    containerRegistry: 'srcrdevRegistry'
     repository: 'hello-app'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
@@ -33,7 +33,7 @@ steps:
     ArtifactName: 'OctopusPkg'
     publishLocation: 'Container'
   
-- task: OctopusPush@2
+- task: OctopusPush@3
   inputs:
     OctoConnectedServiceName: 'srcilabvm01'
     Package: '$(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg'
