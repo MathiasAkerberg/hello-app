@@ -22,14 +22,14 @@ steps:
 - task: OctopusPack@4
   inputs:
     PackageId: 'HelloApp'
-    PackageFormat: 'Zip'
+    PackageFormat: 'NuPkg'
     PackageVersion: '$(Version.Number)'
     SourcePath: '$(Build.SourcesDirectory)/k8s'
     OutputPath: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\HelloApp.$(Version.Number).nupkg'
     ArtifactName: 'OctopusPkg'
     publishLocation: 'Container'
   
