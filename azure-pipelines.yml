@@ -39,12 +39,3 @@ steps:
     Space: 'Spaces-1'
     Package: '$(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg'
     Replace: 'false'
-
-- task: OctopusCreateRelease@4
-  inputs:
-    OctoConnectedServiceName: 'srcilabvm01'
-    Space: 'Spaces-1'
-    ProjectName: 'Projects-1'
-    ReleaseNumber: '$(Version.Number)'
-    Channel: 'Channels-1'
-    DeployToEnvironment: 'Environments-1'
