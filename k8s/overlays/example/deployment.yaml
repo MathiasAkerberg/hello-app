@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: container
-        image: octolab.azurecr.io/hello-app:latest
+        image: srcrdev.azurecr.io/hello-app:latest
         imagePullPolicy: Always
       imagePullSecrets:
-      - name: octolab-registry-secret
+      - name: srcrdev-registry-secret
