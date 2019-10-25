@@ -18,6 +18,9 @@ steps:
     repository: 'hello-app'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
+    tags: |
+      $(Version.Number)
+      latest
 
 - task: OctopusPack@4
   inputs:
