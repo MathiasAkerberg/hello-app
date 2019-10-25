@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: container
-        image: srcrdev.azurecr.io/hello-app:latest
+        image: srcrdev.azurecr.io/hello-app:#{Version.Number}
         imagePullPolicy: Always
       imagePullSecrets:
       - name: srcrdev-registry-secret
