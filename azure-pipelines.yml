@@ -24,10 +24,18 @@ steps:
 
 - task: OctopusPack@4
   inputs:
-    PackageId: 'HelloApp'
+    PackageId: 'HelloApp-Manifest'
     PackageFormat: 'NuPkg'
     PackageVersion: '$(Version.Number)'
     SourcePath: '$(Build.SourcesDirectory)/k8s'
+    OutputPath: '$(Build.ArtifactStagingDirectory)'
+
+- task: OctopusPack@4
+  inputs:
+    PackageId: 'HelloApp-Scripts'
+    PackageFormat: 'NuPkg'
+    PackageVersion: '$(Version.Number)'
+    SourcePath: '$(Build.SourcesDirectory)/scripts'
     OutputPath: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
@@ -40,5 +48,7 @@ steps:
   inputs:
     OctoConnectedServiceName: 'srcilabvm01'
     Space: 'Spaces-1'
-    Package: '$(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg'
+    Package: |
+      $(Build.ArtifactStagingDirectory)/HelloApp-Manifest.$(Version.Number).nupkg
+      $(Build.ArtifactStagingDirectory)/HelloApp-Scripts.$(Version.Number).nupkg
     Replace: 'false'
