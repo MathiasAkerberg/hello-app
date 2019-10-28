@@ -22,20 +22,22 @@ steps:
       $(Version.Number)
       latest
 
-- task: OctopusPack@4
+- task: CopyFiles@2
   inputs:
-    PackageId: 'HelloApp-Manifest'
-    PackageFormat: 'NuPkg'
-    PackageVersion: '$(Version.Number)'
-    SourcePath: '$(Build.SourcesDirectory)/k8s'
-    OutputPath: '$(Build.ArtifactStagingDirectory)'
+    sourceFolder: $(Build.SourcesDirectory)
+    contents: |
+      k8s/**
+      scripts/**
+    targetFolder: '$(Build.SourcesDirectory)/published '
+    overWrite: false
+    flattenFolders: false
 
 - task: OctopusPack@4
   inputs:
-    PackageId: 'HelloApp-Scripts'
+    PackageId: 'HelloApp'
     PackageFormat: 'NuPkg'
     PackageVersion: '$(Version.Number)'
-    SourcePath: '$(Build.SourcesDirectory)/scripts'
+    SourcePath: '$(Build.SourcesDirectory)/published'
     OutputPath: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
@@ -49,6 +51,5 @@ steps:
     OctoConnectedServiceName: 'srcilabvm01'
     Space: 'Spaces-1'
     Package: |
-      $(Build.ArtifactStagingDirectory)/HelloApp-Manifest.$(Version.Number).nupkg
-      $(Build.ArtifactStagingDirectory)/HelloApp-Scripts.$(Version.Number).nupkg
+      $(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg
     Replace: 'false'
