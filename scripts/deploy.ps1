@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $Kustomization,
 
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $false)]
     [string] $Namespace,
 
     [Parameter(Mandatory = $true)]
@@ -16,18 +16,22 @@ function Deploy() {
         [Parameter(Mandatory = $true)]
         [string] $Kustomization,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [string] $Namespace,
     
         [Parameter(Mandatory = $true)]
         [string] $Deployment
     )
 
+    If ([string]::IsNullOrEmpty($Namespace) -eq $false) {
+        $Namespace = "-n $Namespace"
+    }
+
     Write-Host "Deploying Kustomization '$Kustomization'..."
-    kubectl kustomize $Kustomization | kubectl -n $Namespace apply -f -
+    kubectl kustomize $Kustomization | kubectl $Namespace apply -f -
 
     Write-Host "Waiting for deployment..."
-    kubectl -n $Namespace rollout status "deployment.apps/$Deployment"
+    kubectl $Namespace rollout status "deployment.apps/$Deployment"
 }
         
 Deploy -Kustomization $Kustomization -Namespace $Namespace -Deployment $Deployment
