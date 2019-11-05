@@ -10,46 +10,52 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
+stages:
+- stage: build
+  jobs:
+  - job: build
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'srcrdevRegistry'
+        repository: 'hello-app'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(Version.Number)
+          latest
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: $(Build.SourcesDirectory)
+        contents: |
+          k8s/**
+          scripts/**
+        targetFolder: '$(Build.SourcesDirectory)/published '
+        overWrite: false
+        flattenFolders: false
+    - task: OctopusPack@4
+      inputs:
+        PackageId: 'HelloApp'
+        PackageFormat: 'NuPkg'
+        PackageVersion: '$(Version.Number)'
+        SourcePath: '$(Build.SourcesDirectory)/published'
+        OutputPath: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'OctopusPkg'
+        publishLocation: 'Container'
+    - task: OctopusPush@4
+      inputs:
+        OctoConnectedServiceName: 'srcilabvm01'
+        Space: 'Spaces-1'
+        Package: |
+          $(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg
+        Replace: 'false'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'srcrdevRegistry'
-    repository: 'hello-app'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    tags: |
-      $(Version.Number)
-      latest
-
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: $(Build.SourcesDirectory)
-    contents: |
-      k8s/**
-      scripts/**
-    targetFolder: '$(Build.SourcesDirectory)/published '
-    overWrite: false
-    flattenFolders: false
-
-- task: OctopusPack@4
-  inputs:
-    PackageId: 'HelloApp'
-    PackageFormat: 'NuPkg'
-    PackageVersion: '$(Version.Number)'
-    SourcePath: '$(Build.SourcesDirectory)/published'
-    OutputPath: '$(Build.ArtifactStagingDirectory)'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'OctopusPkg'
-    publishLocation: 'Container'
-  
-- task: OctopusPush@4
-  inputs:
-    OctoConnectedServiceName: 'srcilabvm01'
-    Space: 'Spaces-1'
-    Package: |
-      $(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg
-    Replace: 'false'
+- stage: test
+  jobs:
+  - job: test
+    steps:
+    - powershell:
+        Write-Output "Run tests"
