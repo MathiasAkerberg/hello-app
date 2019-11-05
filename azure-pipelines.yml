@@ -13,6 +13,7 @@ pool:
 stages:
 - stage: build
   jobs:
+  
   - job: build
     steps:
     - task: Docker@2
@@ -53,9 +54,8 @@ stages:
           $(Build.ArtifactStagingDirectory)/HelloApp.$(Version.Number).nupkg
         Replace: 'false'
 
-- stage: test
-  jobs:
   - job: test
+    condition: false
     steps:
-    - powershell:
-        Write-Output "Run tests"
+    - script:
+        Write-Output "Run tests"  
